@@ -75,3 +75,43 @@ export const pageQuery = graphql`
     }
   }
 `
+import React from 'react'
+import { Link, graphql } from 'gatsby'
+const BlogIndex = ({ data }) => {
+  const posts = data.allCosmicjsPosts.edges // getting all posts from query
+  // Rendering list of posts with link to their url
+  return (
+    <div>
+      {posts.map(({ node }) => {
+        return (
+          <div key={node.slug}>
+            <Link to={node.slug}>
+              <h3>{node.title}</h3>
+              <img alt="" src={`${node.metadata.hero.imgix_url}?w=400`} />
+            </Link>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+export default BlogIndex
+// Query all posts from GraphQL
+export const pageQuery = graphql`
+  query {
+    allCosmicjsPosts(sort: { fields: [created], order: DESC }, limit: 1000) {
+      edges {
+        node {
+          slug
+          title
+          metadata {
+            hero {
+              imgix_url
+            }
+          }
+          created(formatString: "DD MMMM, YYYY")
+        }
+      }
+    }
+  }
+`
