@@ -40,3 +40,18 @@ module.exports = {
     },
   ],
 }
+// In your gatsby-config.js
+plugins: [
+  {
+    resolve: `gatsby-source-cosmicjs`,
+    options: {
+      bucketSlug: b3dce130-c414-11ec-944c-0f80acf835ab, // Get this value in Bucket > Settings
+      objectTypes: [`posts`], // Note it will result in GraphQL queries (allCosmicjsPosts, cosmicjsPosts)
+      // If you have enabled read_key to fetch data (optional).
+      apiAccess: {
+        read_key: hRrWPbXPDFXvoY5wFfxenKrqwVN6pD1W1UAqi9boffPYIWRP1k // Get this value in Bucket > Settings
+      },
+      localMedia: true // Download media locally for gatsby image (optional)
+    }
+  }
+]
