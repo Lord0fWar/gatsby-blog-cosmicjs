@@ -53,3 +53,42 @@ exports.createPages = ({ graphql, actions }) => {
     )
   })
 }
+const path = require(`path`)
+exports.createPages = async ({ graphql, actions }) => {
+  const { createPage } = actions
+  // Get the single post layout file
+  const blogPost = path.resolve(`./src/templates/blog-post.js`)
+  // Query the GraphQL to get our posts
+  const result = await graphql(
+    `
+      {
+        allCosmicjsPosts(
+          sort: { fields: [created], order: DESC }
+          limit: 1000
+        ) {
+          edges {
+            node {
+              slug
+              title
+            }
+          }
+        }
+      }
+    `
+  )
+  if (result.errors) {
+    throw result.errors
+  }
+  // Create blog posts pages.
+  const posts = result.data.allCosmicjsPosts.edges
+  // For each post in posts create a separate page
+  posts.forEach((post, index) => {
+    createPage({
+      path: post.node.slug,
+      component: blogPost,
+      context: {
+        slug: post.node.slug
+      }
+    })
+  })
+}
